@@ -1,0 +1,17 @@
+def
+if
+while
+equals
+greater
+lesser
+=
++
+-
+~
+/
+{
+}
+;
+
+<S> ::= a<A> | b<A> | c<A> | d<A> | e<A> | z<A> | 0<A> | 1<A>
+<A> ::= a<A> | b<A> | c<A> | d<A> | e<A> | z<A> | 0<A> | 1<A> | ε
