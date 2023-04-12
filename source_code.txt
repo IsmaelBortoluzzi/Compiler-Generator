@@ -1,6 +1,6 @@
 def a;
 def ab = 100;
-a = 0 + 1011 - ab / ab - 100;
+a = 0 + 1011 - ab / ab * 100;
 
 def cb = 1;
 a = a + cb;
