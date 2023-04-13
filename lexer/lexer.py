@@ -21,6 +21,7 @@ def generate_table(file_path):
         else:
             table[symbol]['final'] = False
 
+    table['S']['final'] = True
     return table, aut.all_tokens
 
 
@@ -52,7 +53,7 @@ def lexical_analyzer(source_code_path):
                     else:
                         tabela_simbolos.append({'Line': idx, 'State': 'Error', 'Label': string})
                         fita_saida.append('Error')
-                    E = 'S'  # mapeamento para a próxima estrutura de operadores
+                    E = 'S'
                     string = char
                     id += 1
                 else:  # se o último caractere é um operador
@@ -89,7 +90,7 @@ def lexical_analyzer(source_code_path):
                 if char not in simbolos:  # caso o caracter não esteja na tabela de simbolos
                     E = '<ERROR>'
                 else:
-                    if char in operadores:
+                    if char in separadores:
                         E = 'S'
                         string = ''
                     else:
@@ -110,3 +111,4 @@ def lexical_analyzer(source_code_path):
 
 if __name__ == '__main__':
     lexical_analyzer('/home/ballke/Documents/compiladores/Compiler-Generator/source_code.txt')
+    a = 0
