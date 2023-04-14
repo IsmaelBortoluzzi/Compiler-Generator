@@ -21,7 +21,6 @@ def generate_table(file_path):
         else:
             table[symbol]['final'] = False
 
-    table['S']['final'] = True
     return table, aut.all_tokens
 
 
@@ -40,7 +39,7 @@ def lexical_analyzer(source_code_path):
     operadores = ['+', '-', '/', '*', '=']
     cdg = get_source_code(source_code_path)
 
-    id, idx = 0, 0
+    idx = 0
     for idx, linha in enumerate(cdg):  # pega numero da linha e código de cada linha
         E = 'S'
         string = ''
@@ -55,7 +54,6 @@ def lexical_analyzer(source_code_path):
                         fita_saida.append('Error')
                     E = 'S'
                     string = char
-                    id += 1
                 else:  # se o último caractere é um operador
                     string += char  # adiciona na string o caracter e continua normalmente
                     if char not in simbolos:
@@ -66,12 +64,12 @@ def lexical_analyzer(source_code_path):
                 if tabela[E]['final'] is True:
                     tabela_simbolos.append({'Line': idx, 'State': E, 'Label': string})  # adiciona em tabela_simbolos linha, estado e descricao
                     fita_saida.append(E)  # caso seja um final, adiciona na fita de saida
+                    fita_saida.append(char)
                 else:
                     tabela_simbolos.append({'Line': idx, 'State': '<ERROR>', 'Label': string})
                     fita_saida.append('<ERROR>')
                 E = 'S'
                 string = ''
-                id += 1
             else:
                 if char in espacadores:  # se for um espaçador, continua
                     continue
@@ -80,17 +78,19 @@ def lexical_analyzer(source_code_path):
                         if tabela[E]['final'] is True:  # operado é um final
                             tabela_simbolos.append({'Line': idx, 'State': E, 'Label': string})
                             fita_saida.append(E)
+                        elif string in separadores and E == 'S':
+                            tabela_simbolos.append({'Line': idx, 'State': string, 'Label': string})
+                            fita_saida.append(string)
                         else:
                             tabela_simbolos.append({'Line': idx, 'State': '<ERROR>', 'Label': string})
                             fita_saida.append('<ERROR>')
-                        E = 'S'
                         string = ''
-                        id += 1
                 string += char
                 if char not in simbolos:  # caso o caracter não esteja na tabela de simbolos
                     E = '<ERROR>'
                 else:
                     if char in separadores:
+                        fita_saida.append(string)
                         E = 'S'
                         string = ''
                     else:
@@ -111,4 +111,7 @@ def lexical_analyzer(source_code_path):
 
 if __name__ == '__main__':
     lexical_analyzer('/home/ballke/Documents/compiladores/Compiler-Generator/source_code.txt')
+    from pprint import pprint
+    pprint(fita_saida)
+    pprint(tabela_simbolos)
     a = 0

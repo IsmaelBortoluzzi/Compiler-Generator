@@ -2,13 +2,13 @@ def a;
 def ab=100;
 a=0+1011-ab/ab*100;
 
-def cb = 1;
-a = a + cb;
+def cb53 = 1;
+a = a + cb53;
 
 while ab lesser 100{
-    def abcd = 1001;
-    if 1001 lesser 1000{
-        a = 1111;
+    def kdsu = 1901;
+    if 1791 lesser 3000{
+        a = 17897;
     }
 }
 
@@ -16,5 +16,5 @@ def z;
 z = 0;
 
 if z lesser 1 {
-    def abc = 10;
+    def nij = 50;
 }
