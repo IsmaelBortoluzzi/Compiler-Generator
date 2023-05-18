@@ -1,5 +1,6 @@
 from itertools import chain
 from afd import Automata, formalize_data
+from constants import BASE, TOKENS_AND_GRAMMAR_FILE
 
 
 def generate_table(file_path):
@@ -29,7 +30,7 @@ def get_source_code(file_name):
         return [line for line in file]
 
 
-tabela, simbolos = generate_table('/home/ballke/Documents/compiladores/Compiler-Generator/tokens_grammar2.txt')
+tabela, simbolos = generate_table(f'{BASE}/{TOKENS_AND_GRAMMAR_FILE}')
 fita_saida, tabela_simbolos = list(), list()
 
 
@@ -107,11 +108,3 @@ def lexical_analyzer(source_code_path):
 
     if error is True:
         exit()  # finaliza caso exista erro
-
-
-if __name__ == '__main__':
-    lexical_analyzer('/home/ballke/Documents/compiladores/Compiler-Generator/source_code.txt')
-    from pprint import pprint
-    pprint(fita_saida)
-    pprint(tabela_simbolos)
-    a = 0

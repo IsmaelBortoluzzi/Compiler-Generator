@@ -16,5 +16,5 @@ def z;
 z = 0;
 
 if z lesser 1 {
-    def nij = 50;
+    def ni_j = 50;
 }
