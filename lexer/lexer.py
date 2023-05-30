@@ -65,6 +65,8 @@ def lexical_analyzer(source_code_path):
                 if tabela[E]['final'] is True:
                     tabela_simbolos.append({'Line': idx, 'State': E, 'Label': string})  # adiciona em tabela_simbolos linha, estado e descricao
                     fita_saida.append(E)  # caso seja um final, adiciona na fita de saida
+
+                    tabela_simbolos.append({'Line': idx, 'State': E, 'Label': char})
                     fita_saida.append(char)
                 else:
                     tabela_simbolos.append({'Line': idx, 'State': '<ERROR>', 'Label': string})
@@ -92,6 +94,7 @@ def lexical_analyzer(source_code_path):
                 else:
                     if char in separadores:
                         fita_saida.append(string)
+                        tabela_simbolos.append({'Line': idx, 'State': E, 'Label': string})
                         E = 'S'
                         string = ''
                     else:
