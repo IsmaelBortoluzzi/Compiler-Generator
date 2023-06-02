@@ -25,7 +25,7 @@ stack = [0] # estado inicial da pilha
 lexer_dictionary = dict.fromkeys(['Σ','AΣ','BΣ','DΣ','FΣ','GΣ','HΣ','IΣ','KΣ','LΣ','MΣ','NΣ',
                         'OΣ','QΣ','RΣ','TΣ','UΣ','VΣ','WΣ','YΣ','ZΣ','ΩΣ','ΔΣ','ΘΣ'], 'Id')
 
-lexer_dictionary.update({'Φ':'Inteiro','CΣ':'def', 'EΣ':'if', 'JΣ':'while', 'PΣ':'equals', 
+lexer_dictionary.update({'Φ':'Int','CΣ':'def', 'EΣ':'if', 'JΣ':'while', 'PΣ':'equals', 
                     'XΣ':'greater','ΛΣ':'lesser', '=':'=', '+':'+', '-':'-', '*':'*', '/':'/',
                     '{':'{','}':'}', ';':';', 'EOF':'EOF', '<ERROR>':'Error'})
 
@@ -34,26 +34,28 @@ def translate_token(token):
         if Symbols[index][0] == lexer_dictionary[token]:
             return index
 
-def get_next_token(fita_saida):
+def get_next_token(fita_saida, token_count):
     while True:
         token = fita_saida.pop(0)
+        token_count += 1
         if token in [' ', '\n', '\t']:
             continue
-        return translate_token(token)
+        return translate_token(token), token_count
 
-def get_error_line(lexer):
-   count = 1 # token consumido = |fita| - 1
-   for token in lexer.fita_saida:
-       if token not in [' ', '\n', '\t', '+', '-', '/', '*', '{', '}', '=', ';']:
-           count += 1
-   error = lexer.tabela_simbolos[-count]
-   print(f"Erro sintático na linha {error['Line']}, símbolo '{error['Label']}'.")
+def print_error(lexer, token_count):
+    error = lexer.tabela_simbolos[token_count - 1]
+    print(f"Erro sintático na linha {error['Line']+1}, símbolo '{error['Label']}'.")
+    print("Código da linha: ", end="")
+    for symbol in lexer.tabela_simbolos:
+        if symbol['Line'] == error['Line']:
+            print(symbol['Label'], end=' ')
+    print()
 
 def syntax_analyser(lexer):
-    token, last_token = -1, 0
+    token, last_token, token_count = -1, 0, 0
     while token != 0:
         get_next = False
-        token = get_next_token(lexer.fita_saida) # consome FITA DE SAIDA
+        token, token_count = get_next_token(lexer.fita_saida, token_count) # consome FITA DE SAIDA
         while not get_next:
             try:
                 transition = LALR_States[stack[-1]][token]
@@ -76,5 +78,5 @@ def syntax_analyser(lexer):
                         print("ACEITE")
                         return
             except:
-                get_error_line(lexer)
+                print_error(lexer, token_count)
                 return
