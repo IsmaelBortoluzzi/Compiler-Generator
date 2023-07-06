@@ -18,3 +18,5 @@ z = 0;
 if z lesser 1 {
     def ni_j = 50;
 }
+
+cb53 = {2.5 * 3 + {z - a} * { kdsu + { ab / ni_j }}};

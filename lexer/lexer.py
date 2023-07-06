@@ -105,7 +105,7 @@ def lexical_analyzer(source_code_path):
     error = False
 
     for linha in tabela_simbolos:
-        if linha['State'] == 'Error':  # caso exista erro léxico, imprime
+        if linha['State'] == '<ERROR>':  # caso exista erro léxico, imprime
             error = True
             print(f'Erro léxico: linha {linha["Line"] + 1}, sentença "{linha["Label"]}" não reconhecida!')
 

@@ -10,6 +10,7 @@ def main():
     lexer.lexical_analyzer(f'{BASE}/{SOURCE_CODE_FILE}')
     print_all()
     syntax_analyser.syntax_analyser(lexer)
+    syntax_analyser.semantic_analyser(lexer)
 
 
 def print_all():
