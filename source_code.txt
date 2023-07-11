@@ -3,7 +3,7 @@ def ab=100;
 a=0+1011-ab/ab*100;
 
 def cb53 = 1;
-a = a + cb53;
+a = ab + cb53;
 
 while ab lesser 100{
     def kdsu = 1901;

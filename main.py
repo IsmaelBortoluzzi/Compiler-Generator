@@ -11,6 +11,7 @@ def main():
     print_all()
     syntax_analyser.syntax_analyser(lexer)
     syntax_analyser.semantic_analyser(lexer)
+    syntax_analyser.code_optimizer()
 
 
 def print_all():

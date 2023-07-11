@@ -159,8 +159,6 @@ def syntax_analyser(lexer):
                 exit()
 
 def semantic_analyser(lexer):
-    for x in prod_attr: ## DEBUG, imprime atributos das produções reduzidas
-        print(x.values())
     definition = []
     for num, entry in enumerate(lexer.tabela_simbolos):
         if translate_token(entry['State']) == 12: ## se def, salva sua definição
@@ -171,3 +169,82 @@ def semantic_analyser(lexer):
             else:
                 print(f'Erro semântico na linha {entry["Line"]+1}, variável "{entry["Label"]}" ainda não foi definida.')
                 exit()
+
+
+def get_nodes(prod):
+    nodes = {}
+    codes = [x for x in str(prod['Code']).split(';') if x != '']
+    for oper in codes:
+        oper = oper.split('=')
+        opp = oper[1].strip()
+        if opp in nodes: # se operações iguais, adiciona temp ao nome
+            nodes[opp] = nodes[opp] + ','+ oper[0].strip()
+        else:
+            nodes[opp] = oper[0].strip()
+    return [x.strip() for x in nodes.values()]
+
+def temp_index(temp, nodes):
+    for index, part in enumerate(nodes):
+        part = part.split(',')
+        for x in part:
+            if temp == x:
+                return index
+
+def build_graph(prod, nodes):
+    graph = []
+    for row in range(len(nodes)): ## inicia matriz de adjacência
+        r = []
+        for _ in range(len(nodes)):
+            r.append(0)
+        graph.append(r)
+    codes = [x for x in str(prod['Code']).split(';') if x != '']
+    for oper in codes: ## cria arestas em operações que utilizam os simbolos
+        oper = oper.replace(' =', '').split(' ')
+        if len(oper) == 4:
+            if temp_index(oper[1], nodes) != None:
+                graph[temp_index(oper[0], nodes)][temp_index(oper[1], nodes)] = 1
+            if temp_index(oper[3], nodes) != None:
+                graph[temp_index(oper[0], nodes)][temp_index(oper[3], nodes)] = 1
+        else:
+            graph[temp_index(oper[0], nodes)][temp_index(oper[1], nodes)] = 1
+    return graph
+
+def optimize_graph(graph, nodes):
+    optimized = []
+    for index in range(len(nodes)): ## algoritmo de otimização
+        if nodes[index] in optimized:
+            continue
+        current = index
+        iter, added = True, False
+        while iter:
+            if added: # volta a verificar nodo base
+                index = current
+            for row, line in enumerate(graph):
+                if line[index] == 0:
+                    if row == (len(graph) - 1) and nodes[index] not in optimized:
+                        optimized.append(nodes[index])
+                        added = True
+                        break
+                    continue
+                else: ## nodo é utilizado em outra temp
+                    if nodes[row] in optimized: ## se outro temp já está em L
+                        optimized.append(nodes[index]) ## add nodo à L
+                        added = True
+                        if index == current: # se for o índice, para de iterar
+                            iter = False
+                        break
+                    index = row ## se não está em L, novo nodo = outra temp, itera
+                    added = False
+                    break
+    return optimized
+
+def code_optimizer():
+    for x in prod_attr: ## DEBUG, imprime atributos das produções reduzidas
+        print(x.values())
+    for prod in prod_attr: ## otimiza operações individuais
+        if prod['Token'] == 'G' and 'T' in prod['Code']:
+            nodes = get_nodes(prod)
+            graph = build_graph(prod, nodes)
+            optimized = optimize_graph(graph, nodes)
+            print('\n', prod['Code'])
+            print("L: ", optimized)
