@@ -13,7 +13,7 @@ while ab lesser 100{
 }
 
 def z;
-z = 0;
+z = { a + ab } + { a + ab };
 
 if z lesser 1 {
     def ni_j = 50;

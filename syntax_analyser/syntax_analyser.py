@@ -238,6 +238,18 @@ def optimize_graph(graph, nodes):
                     break
     return optimized
 
+def print_optimized(prod, optimized):
+    optim = ''
+    codes = [x for x in str(prod['Code']).split(';') if x != '']
+    for opt in optimized:
+        for code in codes:
+            first = str(code.split('=')[0]).strip()
+            if first in opt:
+                optim = code + ';' + optim
+    print('\nOriginal: ', prod['Code'])
+    print('L: ', optimized)
+    print('Otimizado: ', optim)
+
 def code_optimizer():
     for x in prod_attr: ## DEBUG, imprime atributos das produções reduzidas
         print(x.values())
@@ -246,5 +258,4 @@ def code_optimizer():
             nodes = get_nodes(prod)
             graph = build_graph(prod, nodes)
             optimized = optimize_graph(graph, nodes)
-            print('\n', prod['Code'])
-            print("L: ", optimized)
+            print_optimized(prod, optimized)

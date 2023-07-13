@@ -1,0 +1,42 @@
+"Start Symbol"   = <S>
+
+{Id Head}        = {Letter} + [_]
+{Id Tail}        = {Id Head} + {Digit}
+                 
+Int              = {Digit}+
+Float            = {Digit}*[.]{Digit}+
+Id               = {Id Head}{Id Tail}*
+Comp             = ( 'equals' | 'greater' | 'lesser' )
+                 
+<S>            ::= <A> <S>
+                 | 
+
+<A>            ::= <G> <B>
+                 | if <F> Comp <F> '{' <A> '}'
+                 | while <F> Comp <F> '{' <A> '}'
+
+<B>            ::= <A>
+                 | 
+
+<C>            ::= <C> '+' <D>
+                 | <C> '-' <D>
+                 | <D>
+
+<D>            ::= <D> '*' <E>
+                 | <D> '/' <E>
+                 | <E>
+
+<E>            ::= '{' <C> '}'
+                 | <F>
+
+<F>            ::= Int
+                 | Float
+                 | Id
+
+<G>            ::= def Id <H>
+                 | <I> '=' <C> ';'
+
+<H>            ::= ';'
+                 | '=' <F> ';'
+
+<I>            ::= Id
